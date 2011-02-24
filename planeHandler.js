@@ -35,22 +35,23 @@ function Plane(type,entrance,emergency) {
   this.id=this.generateId();
 }
 Plane.prototype.launch=function() {
+  var entrance=[0,0],otherend=[0,0];
   switch(Math.floor(this.entrance/4)) {
     case 0: //top - 0 to 3
-      var entrance=[125+250*this.entrance,-40];
-      var otherend=[randomNum(1100),600];
+      entrance=[125+250*this.entrance,-40];
+      otherend=[randomNum(1100),600];
       break;
     case 1: //left - 4 to 7
-      var entrance=[-40,75+150*(this.entrance-4)];
-      var otherend=[1100,randomNum(600)];
+      entrance=[-40,75+150*(this.entrance-4)];
+      otherend=[1100,randomNum(600)];
       break;
     case 2: //bottom - 8 to 11
-      var entrance=[125+250*(this.entrance-8),640];
-      var otherend=[randomNum(1100),0];
+      entrance=[125+250*(this.entrance-8),640];
+      otherend=[randomNum(1100),0];
       break;
     case 3: //right - 12 to 15
-      var entrance=[1500,75+150*(this.entrance-12)];
-      var otherend=[0,randomNum(600)];
+      entrance=[1500,75+150*(this.entrance-12)];
+      otherend=[0,randomNum(600)];
       break;
   }
   this.path=paper.path("M"+entrance[0]+","+entrance[1]+"L"+otherend[0]+","+otherend[1]).attr({stroke:"none"});
@@ -58,12 +59,11 @@ Plane.prototype.launch=function() {
   this.plane=paper.image(planeImages[this.type],entrance[0],entrance[1],40,40);
   this.plane.node.onmousedown=function(e) {
     window.onmousemove=function(e){
-      if (!e) e=window.event;pos=getMouseCoords(e);
-      
+      if (!e) { e=window.event;pos=getMouseCoords(e); }
     };
-  }
+  };
   this.plane.node.onmouseup=function(e) {
-    if (!e) e=window.event;pos=getMouseCoords(e);
+    if (!e) { e=window.event;pos=getMouseCoords(e); }
     if (window.onmousemove) { //in some cases like we drag it over a runway it automatically ends even though the mouse is still down, in which case we will remove window.onmousemove to stop wasting energy and to tell us here
       window.onmousemove=undefined;
       // we are going to put a little dot at the end
@@ -71,34 +71,34 @@ Plane.prototype.launch=function() {
         fill: "#f00"
       });
     }
-  }
+  };
   this.plane.animateAlong(this.path,30000,true,function() {
     //either land the plane or draw a new path to follow, which is either going to be bouncing off the edge or at the end of a user written path
   });
-}
+};
 Plane.prototype.remove=function() {
 
-}
+};
 Plane.prototype.generateId=function() {
   for (i=0;i<planes.length;i++) {
-    if (typeof planes[i]=="undefined") {
+    if (typeof planes[i]==="undefined") {
       planes[i]=this;
       return i;
-      break;
     }
   }
-  if (i==1000) {
+  if (i===1000) {
     console.error("1000 planes on field!");
-    if (navigator.notification)
+    if (navigator.notification) {
       navigator.notification.alert([
         "Error",
         init,
         "You have 1000 planes on the airfield!",
         "Go back to the main menu"
       ]);
+    }
     else {
       alert("Error: You have 1000 planes on the airfield!\n\nGo back to the main menu");
       init();
     }
   }
-}
+};
