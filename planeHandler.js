@@ -19,6 +19,9 @@ function getMouseCoords(e) {
     pos.y=e.clientY+document.body.scrollTop
       +document.documentElement.scrollTop;
   }
+  //remember to offset to the canvas - thanks to shiraz's uncle
+  pos.x -= paper.canvas.offsetLeft;
+  pos.y -= paper.canvas.offsetTop;
   return pos;
 }
 var paper=Raphael("container",1100,600);
@@ -56,6 +59,7 @@ Plane.prototype.launch=function() {
   this.plane.node.onmousedown=function(e) {
     window.onmousemove=function(e){
       if (!e) e=window.event;pos=getMouseCoords(e);
+      
     };
   }
   this.plane.node.onmouseup=function(e) {
