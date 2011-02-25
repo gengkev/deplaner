@@ -26,15 +26,17 @@ function getMouseCoords(e) {
 }
 var paper=Raphael("container",1100,600);
 paper.image("field1.png",0,0,1100,600);
-var planeImages=["plane1.png","plane2.png","plane3.png"];
+var planeImages=["plane1.png"];
+var planeImagesPreload=[];
+planeImages.forEach(function(e,i,a) {
+  planeImagesPreload[i]=new Image().src=e;
+});
 var planes=new Array(1000);
 function Plane(type,entrance,emergency) {
   this.type=type;
   this.entrance=entrance;
   this.emergency=emergency; //either undefined or a SVG path
   this.id=this.generateId();
-}
-Plane.prototype.launch=function() {
   var entrance=[0,0],otherend=[0,0];
   switch(Math.floor(this.entrance/4)) {
     case 0: //top - 0 to 3
@@ -47,11 +49,11 @@ Plane.prototype.launch=function() {
       break;
     case 2: //bottom - 8 to 11
       entrance=[125+250*(this.entrance-8),640];
-      otherend=[randomNum(1100),0];
+      otherend=[randomNum(1100),-40];
       break;
     case 3: //right - 12 to 15
       entrance=[1500,75+150*(this.entrance-12)];
-      otherend=[0,randomNum(600)];
+      otherend=[-40,randomNum(600)];
       break;
   }
   this.path=paper.path("M"+entrance[0]+","+entrance[1]+"L"+otherend[0]+","+otherend[1]).attr({stroke:"none"});

@@ -20,17 +20,12 @@ body {
   background-color:white;
 }
 </style>
-<script type="text/javascript" src="raphael.js"></script>
+<script type="text/javascript" src="libraries/raphael.js"></script>
 <script type="text/javascript">
 //var mobile=false;
 function init() {
   window.container=document.getElementById("container");
-  //if (mobile==true)
-  //  loadScript("mobile/index.js");
-  //else
-  //  loadScript("computer/index.js");
-  loadScript("computer/planeHandler.js",true);
-
+  loadScript("planeHandler.js",true);
 }
 window.onload=init;
 function loadScript(src,remove) {
