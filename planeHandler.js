@@ -1,4 +1,5 @@
 /*
+ pathState: <path d="" class="pathState0" />
  pathState definition: 0 - no path; 1 - dragging path; 2 - path to somewhere
    3- path to landing strip
  plane entrances: 4 on each side, starting on the left (starts at 0)
@@ -19,11 +20,12 @@ function getMouseCoords(e) {
     pos.y=e.clientY+document.body.scrollTop
       +document.documentElement.scrollTop;
   }
-  //remember to offset to the canvas - thanks to shiraz's uncle
+  //remember to offset to the canvas - thanks to Shiraz's uncle
   pos.x -= paper.canvas.offsetLeft;
   pos.y -= paper.canvas.offsetTop;
   return pos;
 }
+var currentPlaneSelected=null;
 var paper=Raphael("container",1100,600);
 paper.image("field1.png",0,0,1100,600);
 var planeImages=["plane1.png"];
@@ -37,49 +39,77 @@ function Plane(type,entrance,emergency) {
   this.entrance=entrance;
   this.emergency=emergency; //either undefined or a SVG path
   this.id=this.generateId();
-  var entrance=[0,0],otherend=[0,0];
+  var entercoords=[0,0],otherend=[0,0];
   switch(Math.floor(this.entrance/4)) {
     case 0: //top - 0 to 3
-      entrance=[125+250*this.entrance,-40];
+      entercoords=[125+250*this.entrance,-40];
       otherend=[randomNum(1100),600];
       break;
     case 1: //left - 4 to 7
-      entrance=[-40,75+150*(this.entrance-4)];
+      entercoords=[-40,75+150*(this.entrance-4)];
       otherend=[1100,randomNum(600)];
       break;
     case 2: //bottom - 8 to 11
-      entrance=[125+250*(this.entrance-8),640];
+      entercoords=[125+250*(this.entrance-8),640];
       otherend=[randomNum(1100),-40];
       break;
     case 3: //right - 12 to 15
-      entrance=[1500,75+150*(this.entrance-12)];
+      entercoords=[1500,75+150*(this.entrance-12)];
       otherend=[-40,randomNum(600)];
       break;
   }
-  this.path=paper.path("M"+entrance[0]+","+entrance[1]+"L"+otherend[0]+","+otherend[1]).attr({stroke:"none"});
-  this.pathState=0;
-  this.plane=paper.image(planeImages[this.type],entrance[0],entrance[1],40,40);
+  this.path=paper.path("M"+entercoords[0]+","+entercoords[1]+"L"+otherend[0]+","
+    +otherend[1]).attr({stroke:"none"});
+  this.path.node.setAttribute("class","pathState0");
+  this.plane=paper.image(planeImages[this.type],entercoords[0],entercoords[1],40,40);
+  this.plane.node.setAttribute("parentPlaneId",this.id);
   this.plane.node.onmousedown=function(e) {
-    window.onmousemove=function(e){
-      if (!e) { e=window.event;pos=getMouseCoords(e); }
+    var _this=planes[Number(this.attributes["parentPlaneId"].nodeValue)];
+    _this.path.node.setAttribute("class","pathState1");
+    currentPlaneSelected=_this.id;
+    window.onmousemove=function(e){ //no work... probably
+      if (!e) { e=window.event; } pos=getMouseCoords(e);
+      /* We should add points to the end of the path, and hope it will 
+       * automatically adjust?
+       */
+      var _this=planes[currentPlaneSelected];
+      var d=_this.path.node.attributes.d.nodeValue;
+      d=d.substring(d.lastIndexOf("L")).split(",",2); //array = x and y
+      d[0]=Number(d[0]);d[1]=Number(d[1]); //convert to numbers
+      //Pythagorean
+      var l=Math.sqrt(Math.pow(pos.x-d[0],2)+Math.pow(pos.y-d[1],2));
+      if (l>5) { //more than 5 pixels change
+        _this.length+=l;
+        _this.path.node.attributes.d.nodeValue+="L"+pos.x+","+pos.y;
+      }
     };
   };
   this.plane.node.onmouseup=function(e) {
-    if (!e) { e=window.event;pos=getMouseCoords(e); }
-    if (window.onmousemove) { //in some cases like we drag it over a runway it automatically ends even though the mouse is still down, in which case we will remove window.onmousemove to stop wasting energy and to tell us here
+    if (!e) { e=window.event; } pos=getMouseCoords(e);
+    if (window.onmousemove) { 
+    /* in some cases like we drag it over a runway it automatically ends even though the mouse is still down, in which case we will remove window.onmousemove to stop wasting energy and to tell us here */
       window.onmousemove=undefined;
       // we are going to put a little dot at the end
-      this.marker=paper.ellipse(pos.x,pos.y,2,2).attr({
-        fill: "#f00"
-      });
+      var _this=planes[currentPlaneSelected];
+      _this.marker=paper.ellipse(pos.x,pos.y,2,2).attr({fill: "#f00"});
+      _this.path.node.setAttribute("class","pathState2");
+      window.currentPlaneSelected=null;
     }
   };
-  this.plane.animateAlong(this.path,30000,true,function() {
-    //either land the plane or draw a new path to follow, which is either going to be bouncing off the edge or at the end of a user written path
+  this.length=Math.sqrt(Math.pow(entercoords[0]-otherend[0],2)
+    +Math.pow(entercoords[1]-otherend[1],2));
+  // 50 pixels per second times 1000 (per millisecond)
+  this.plane.animateAlong(this.path,Math.round(this.length*20),true,function(){
+    //bounce off the edge of screen
+    
   });
-};
+}
 Plane.prototype.remove=function() {
-
+  this.plane.animate({opacity:0},1000,function() {
+    this.plane.remove();
+  });
+  this.path.remove();
+  planes[this.id]=undefined;
 };
 Plane.prototype.generateId=function() {
   for (i=0;i<planes.length;i++) {
