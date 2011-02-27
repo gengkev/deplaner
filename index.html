@@ -35,13 +35,13 @@ body {
 //var mobile=false;
 function init() {
   window.container=document.getElementById("container");
-  loadScript("planeHandler.js",true);
+  container.innerHTML="";
+  loadScript("planeActions.js","planeActions");
 }
 window.onload=init;
-function loadScript(src,remove) {
-  if (remove==true) {
-    try { document.head.removeChild(document.getElementById("loadedScript")); } catch(e) { };
-    container.innerHTML="";
+function loadScript(src,id) {
+  if (document.getElementById(id)) {
+    try { document.head.removeChild(document.getElementById(id)); } catch(e) { };
   }
   var script=document.createElement("script");
   script.setAttribute("src",src);
