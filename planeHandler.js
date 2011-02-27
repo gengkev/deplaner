@@ -5,6 +5,7 @@
  plane entrances: 4 on each side, starting on the left (starts at 0)
  remember: 1000 by 600
 */
+var planeImages=["plane1.png"];
 function randomNum(range) {
   return Math.floor(Math.random()*(range+1));
 }
@@ -26,13 +27,6 @@ function getMouseCoords(e) {
   return pos;
 }
 var currentPlaneSelected=null;
-var paper=Raphael("container",1100,600);
-paper.image("field1.png",0,0,1100,600);
-var planeImages=["plane1.png"];
-var planeImagesPreload=[];
-planeImages.forEach(function(e,i,a) {
-  planeImagesPreload[i]=new Image().src=e;
-});
 var planes=new Array(1000);
 function Plane(type,entrance,emergency) {
   this.type=type;
@@ -63,8 +57,11 @@ function Plane(type,entrance,emergency) {
   this.plane=paper.image(planeImages[this.type],entercoords[0],entercoords[1],40,40);
   this.plane.node.setAttribute("parentPlaneId",this.id);
   this.plane.node.onmousedown=function(e) {
+    if (!e) { e=window.event; } pos=getMouseCoords(e);
     var _this=planes[Number(this.attributes.parentPlaneId.nodeValue)];
     console.log("Plane with id "+_this.id+" mouse down");
+    _this.plane.stop();
+    _this.plane.attr({d:"",x:pos.x,y:pos.y});
     _this.path.node.setAttribute("class","pathState1");
     currentPlaneSelected=_this.id;
     window.onmousemove=function(e){ //no work... probably
@@ -108,7 +105,7 @@ function Plane(type,entrance,emergency) {
 }
 Plane.prototype.remove=function() {
   this.plane.animate({opacity:0},1000,function() {
-    this.plane.remove();
+    this.remove();
   });
   this.path.remove();
   planes[this.id]=undefined;
