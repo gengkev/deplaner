@@ -83,6 +83,7 @@ function Plane(type,entrance,emergency) {
     };
     window.onmouseup=function(e) {
       console.log("Plane with id "+_this.id+" mouse up");
+      window.onmouseup=undefined;
       if (window.onmousemove) {
       /* in some cases like we drag it over a runway it automatically ends even though the mouse is still down, in which case we will remove window.onmousemove to stop wasting energy and to tell us here */
         window.onmousemove=undefined;
