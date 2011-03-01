@@ -40,6 +40,14 @@ function init() {
   container.innerHTML="";
   loadScript("planeActions.js","planeActions");
 }
+function preloadImages() {
+  var planeImagesPreload=[];
+  planeImages.forEach(function(e,i,a) {
+    planeImagesPreload[i]=new Image().src=e;
+  });
+  new Image().src="field1.png";
+}
+preloadImages();
 window.onload=init;
 function loadScript(src,id) {
   if (document.getElementById(id)) {
