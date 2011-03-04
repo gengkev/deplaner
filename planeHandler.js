@@ -119,4 +119,5 @@ Plane.prototype.generateId=function() {
       return i;
     }
   }
+  if (i<100) location.refresh()
 };
