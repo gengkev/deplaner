@@ -27,7 +27,7 @@ function getMouseCoords(e) {
   return pos;
 }
 var currentPlaneSelected=null;
-var planes=new Array(1000);
+var planes=new Array();
 function Plane(type,entrance,emergency) {
   this.type=type;
   this.entrance=entrance;
@@ -66,6 +66,7 @@ function Plane(type,entrance,emergency) {
     currentPlaneSelected=_this.id;
     window.onmousemove=function(e){ //no work... probably
       if (!e) { e=window.event; } pos=getMouseCoords(e);
+      pos.x-=20;pos.y-=20; //offset to get the cursor on the plane center
       /* We should add points to the end of the path, and hope it will 
        * automatically adjust?
        */
@@ -118,19 +119,5 @@ Plane.prototype.generateId=function() {
       return i;
     }
   }
-  if (i===1000) {
-    console.error("1000 planes on field!");
-    if (navigator.notification) {
-      navigator.notification.alert([
-        "Error",
-        init,
-        "You have 1000 planes on the airfield!",
-        "Go back to the main menu"
-      ]);
-    }
-    else {
-      alert("Error: You have 1000 planes on the airfield!\n\nGo back to the main menu");
-      init();
-    }
-  }
+  alert();
 };
