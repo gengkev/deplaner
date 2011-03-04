@@ -113,11 +113,10 @@ Plane.prototype.remove=function() {
   planes[this.id]=undefined;
 };
 Plane.prototype.generateId=function() {
-  for (i=0;i<planes.length;i++) {
+  for (i=0;i<=planes.length;i++) {
     if (typeof planes[i]==="undefined") {
       planes[i]=this;
       return i;
     }
   }
-  console.log("running after for loop that returns?");
 };
