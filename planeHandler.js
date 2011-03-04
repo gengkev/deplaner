@@ -119,5 +119,5 @@ Plane.prototype.generateId=function() {
       return i;
     }
   }
-  alert();
+  console.log("running after for loop that returns?");
 };
