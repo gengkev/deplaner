@@ -3,7 +3,6 @@
  pathState definition: 0 - no path; 1 - dragging path; 2 - path to somewhere
    3- path to landing strip
  plane entrances: 4 on each side, starting on the left (starts at 0)
- remember: 1000 by 600
 */
 var planeImages=["plane1.png"];
 function randomNum(range) {
@@ -36,29 +35,29 @@ function Plane(type,entrance,emergency) {
   var entercoords=[0,0],otherend=[0,0];
   switch(Math.floor(this.entrance/4)) {
     case 0: //top - 0 to 3
-      entercoords=[125+250*this.entrance,-40];
-      otherend=[randomNum(1100),600];
+      entercoords=[width/8+width/4*this.entrance,-1*planeLength];
+      otherend=[randomNum(width),height];
       break;
     case 1: //left - 4 to 7
-      entercoords=[-40,75+150*(this.entrance-4)];
-      otherend=[1100,randomNum(600)];
+      entercoords=[-1*planeLength,height/8+height/4*(this.entrance-4)];
+      otherend=[width,randomNum(height)];
       break;
     case 2: //bottom - 8 to 11
-      entercoords=[125+250*(this.entrance-8),640];
-      otherend=[randomNum(1100),-40];
+      entercoords=[width/8+width/4*(this.entrance-8),height+planeLength];
+      otherend=[randomNum(width),-40];
       break;
     case 3: //right - 12 to 15
-      entercoords=[1500,75+150*(this.entrance-12)];
-      otherend=[-40,randomNum(600)];
+      entercoords=[width+planeLength,height/8+height/4*(this.entrance-12)];
+      otherend=[-1*planeLength,randomNum(height)];
       break;
   }
   this.path=paper.path("M"+entercoords[0]+","+entercoords[1]+"L"+otherend[0]+","+otherend[1]);
   this.path.node.setAttribute("class","pathState0");
-  this.plane=paper.image(planeImages[this.type],entercoords[0],entercoords[1],40,40);
-  this.plane.node.setAttribute("parentPlaneId",this.id);
+  this.plane=paper.image(planeImages[this.type],entercoords[0],entercoords[1],planeLength,planeLength);
+  this.plane.node.parentPlaneId=this.id;
   this.plane.node.onmousedown=function(e) {
     if (!e) { e=window.event; } pos=getMouseCoords(e);
-    var _this=planes[Number(this.attributes.parentPlaneId.nodeValue)];
+    var _this=planes[this.parentPlaneId];
     console.log("Plane with id "+_this.id+" mouse down");
     _this.plane.stop();
     _this.plane.attr({d:"",x:pos.x,y:pos.y});
@@ -66,7 +65,7 @@ function Plane(type,entrance,emergency) {
     currentPlaneSelected=_this.id;
     window.onmousemove=function(e){ //no work... probably
       if (!e) { e=window.event; } pos=getMouseCoords(e);
-      pos.x-=20;pos.y-=20; //offset to get the cursor on the plane center
+      // pos.x+=planeLength/2;pos.y+=planeLength/2; //offset to get the cursor on the plane center
       /* We should add points to the end of the path, and hope it will 
        * automatically adjust?
        */
@@ -89,7 +88,7 @@ function Plane(type,entrance,emergency) {
       /* in some cases like we drag it over a runway it automatically ends even though the mouse is still down, in which case we will remove window.onmousemove to stop wasting energy and to tell us here */
         window.onmousemove=undefined;
         // we are going to put a little dot at the end
-        _this.marker=paper.ellipse(pos.x,pos.y,2,2).attr({fill: "#f00"});
+        _this.marker=paper.ellipse(pos.x,pos.y,width/600,width/600).attr({fill: "#f00"});
         _this.path.node.setAttribute("class","pathState2");
         window.currentPlaneSelected=null;
       }

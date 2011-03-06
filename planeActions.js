@@ -1,7 +1,29 @@
 // This is the js file where we do stuff. planeHandler.js does nothing, it just initializes everything.
 
-var paper=Raphael("container",1100,600);
-paper.image("field1.png",0,0,1100,600);
+function resize() {
+  document.getElementById("container").innerHTML="";
+  var containerStyle=window.getComputedStyle(document.getElementById("container"),null);
+  if (parseInt(containerStyle.getPropertyValue("width"))<parseInt(containerStyle.getPropertyValue("height"))) {
+    document.getElementById("container").style.height=String(Math.floor(parseInt(containerStyle.getPropertyValue("width"))*6/11))+"px";
+    window.height=parseInt(document.getElementById("container").style.height);
+    window.width=parseInt(containerStyle.getPropertyValue("width"));
+  }
+  else {
+    document.getElementById("container").style.width=String(Math.floor(parseInt(containerStyle.getPropertyValue("height"))*11/6))+"px";
+    window.width=parseInt(document.getElementById("container").style.width);
+    window.height=parseInt(containerStyle.getPropertyValue("height"));
+  }
+  planeLength=width*1/30;
+
+}
+resize();
+
+window.onresize=function() {
+  confirm("The window cannot change its size unless you reload.");
+}
+
+var paper=Raphael("container",width,height);
+paper.image("field1.png",0,0,width,height);
 var planeImagesPreload=[];
 planeImages.forEach(function(e,i,a) {
   planeImagesPreload[i]=new Image().src=e;
