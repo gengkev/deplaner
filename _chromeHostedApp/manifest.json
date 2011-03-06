@@ -1,0 +1,16 @@
+{
+  "name": "Deplaner",
+  "version": "0.1",
+  "description": "A plain text description",
+  // "icons": { ... },
+  "default_locale": "en",
+  "app": {
+    "launch": {
+      "web_url": "http://deplaner.googlecode.com/svn/trunk/index.html",
+      "container": "tab"
+    }
+  },
+  // "homepage_url": "http://path/to/homepage",
+  // "options_page": "aFile.html",
+  "update_url": "http://deplaner.googlecode.com/svn/trunk/platforms/chromeUpdate.xml"
+}
