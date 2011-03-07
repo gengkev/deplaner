@@ -19,7 +19,7 @@ function resize() {
 resize();
 
 window.onresize=function() {
-  confirm("The window cannot change its size unless you reload.");
+  (confirm("The window cannot change its size unless you reload.\n\nDo you want to do so now?")==true)?location.reload():null;
 }
 
 var paper=Raphael("container",width,height);
@@ -41,11 +41,11 @@ var circle3;
 var time=0;
 var timer=setInterval(function(){time++;},1000);
 function planeLaunch() {
-  if(Math.random()*time/30 > 1) {
+  if(randomNum()*time/10 > 1) {
     new Plane(0,randomNum(15));
     console.log("Based on random, plane chose to launch");
   }
   else { console.log("Based on random, plane chose NOT to launch"); }
-  setTimeout(planeLaunch,3000+(3000/time));
+  setTimeout(planeLaunch,5000+(10000/time));
 };
 planeLaunch();
