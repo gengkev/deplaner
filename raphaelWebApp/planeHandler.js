@@ -37,23 +37,19 @@ function Plane(type,entrance,emergency) {
   switch(Math.floor(this.entrance/4)) {
     case 0: //top - 0 to 3
       entercoords=[width/8+width/4*this.entrance,-1*planeLength];
-      otherend=[randomNum(width),height];
-      bounceside=0;
+      otherend=[randomNum(width),height+planeLength];
       break;
     case 1: //left - 4 to 7
       entercoords=[-1*planeLength,height/8+height/4*(this.entrance-4)];
-      otherend=[width,randomNum(height)];
-      bounceside=1;
+      otherend=[width+planeLength,randomNum(height)];
       break;
     case 2: //bottom - 8 to 11
       entercoords=[width/8+width/4*(this.entrance-8),height+planeLength];
       otherend=[randomNum(width),-1*planeLength];
-      bounceside=2;
       break;
     case 3: //right - 12 to 15
       entercoords=[width+planeLength,height/8+height/4*(this.entrance-12)];
       otherend=[-1*planeLength,randomNum(height)];
-      bounceside=3;
       break;
   }
   this.path=paper.path("M"+entercoords[0]+","+entercoords[1]+"L"+otherend[0]+","+otherend[1]);
@@ -107,8 +103,9 @@ function Plane(type,entrance,emergency) {
   return this;
 }
 function bouncePlane() {
-/*
   var _this=planes[this.parentPlaneId];
+  _this.remove();
+/*
   var d=_this.path.node.attributes.d.nodeValue;
   var start=d.substring(d.indexOf("L")+1).split(",",2); //array = x and y
   var end=d.substring(d.lastIndexOf("L")+1).split(",",2);
