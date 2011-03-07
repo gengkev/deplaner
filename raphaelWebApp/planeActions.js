@@ -31,7 +31,7 @@ planeImages.forEach(function(e,i,a) {
 
 //Base
 var circle1=paper.circle(width*52.9/111,height*23.8/61,width*6/174).attr("stroke","none");
-circle1.addEventListener("mouseover",function(){
+circle1.node.addEventListener("mouseover",function(){
 
 },false);
 var circle2;
