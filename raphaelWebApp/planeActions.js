@@ -30,10 +30,12 @@ planeImages.forEach(function(e,i,a) {
 });
 
 //Base
-var circle1=paper.circle(width*52.9/111,height*23.8/61,width*30/850).attr("stroke","2pt");
-console.log("Width: "+width+" height: "+height)
-var circle2
-var circle3
+var circle1=paper.circle(width*52.9/111,height*23.8/61,width*6/174).attr("stroke","none");
+circle1.addEventListener("mouseover",function(){
+
+},false);
+var circle2;
+var circle3;
 
 // Javascript random number generator spazzes well with this
 var time=0;
