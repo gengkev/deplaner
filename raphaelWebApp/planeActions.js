@@ -30,7 +30,7 @@ var circle1=paper.circle(width*52.9/111,height*23.8/61,width*6/174).attr("stroke
 circle1.node.addEventListener("mouseover",function(){
 
 },false);
-var circle2=paper.rect(260,290,50,35);
+var circle2=paper.rect(270,290,50,35);
 var circle3=paper.rect(530,420,70,50);
 
 // Javascript random number generator spazzes well with this
