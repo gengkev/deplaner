@@ -1,12 +1,12 @@
 {
-  "name": "Deplaner",
+  "name": "__MSG_name__",
   "version": "0.1",
-  "description": "A plain text description",
+  "description": "__MSG_description__",
   // "icons": { ... },
   "default_locale": "en",
   "app": {
     "launch": {
-      "web_url": "http://deplaner.googlecode.com/svn/trunk/index.html",
+      "web_url": "http://deplaner.googlecode.com/svn/trunk/raphaelWebApp/index.html",
       "container": "tab"
     }
   },

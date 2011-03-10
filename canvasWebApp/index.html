@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8" />
+<title>Deplaner</title>
+<style type="text/css">
+body,html {
+  padding:0;
+  margin:0;
+  background-color:grey;
+  width:100%;
+  height:100%;
+  font-family:Arial;
+}
+canvas {
+  width:100%;
+  height:100%;
+  margin:0px auto;
+  padding:0px;
+  border:none;
+  background-color:white;
+}
+</style>
+<script type="text/javascript" src="planeHandler.js"></script>
+<script type="text/javascript">
+function init() {
+  window.container=document.getElementById("canvas");
+  loadScript("planeActions.js","planeActions");
+}
+function preloadImages() {
+  var planeImagesPreload=[];
+  planeImages.forEach(function(e,i,a) {
+    planeImagesPreload[i]=new Image().src=e;
+  });
+  new Image().src="field1.png";
+}
+preloadImages();
+window.onload=init;
+function loadScript(src,id) {
+  if (document.getElementById(id)) {
+    try { document.head.removeChild(document.getElementById(id)); } catch(e) { };
+  }
+  var script=document.createElement("script");
+  script.setAttribute("src",src);
+  script.setAttribute("type","text/javascript");
+  script.setAttribute("id","loadedScript");
+  document.head.appendChild(script);
+}
+</script>
+<canvas id="container">
+<h3>Sorry, you cannot run this web app because it requires HTML5 canvas!</h3>
+</canvas>
+<!--<br />
+Loading...<br /><br />
+<img src="load.gif" alt="" />
+-->
+<noscript><h3>Sorry, you cannot run this web app because it requires Javascript!</h3></noscript>
+</html>

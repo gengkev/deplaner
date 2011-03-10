@@ -22,7 +22,7 @@ window.onresize=function() {
   (confirm("The window cannot change its size unless you reload.\n\nDo you want to do so now?")==true)?location.reload():null;
 }
 
-var paper=Raphael("container",width,height);
+window.canvas=container.getContext("2d");
 paper.image("field1.png",0,0,width,height);
 
 //Base
