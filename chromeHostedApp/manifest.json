@@ -6,7 +6,7 @@
   "default_locale": "en",
   "app": {
     "launch": {
-      "web_url": "http://deplaner.googlecode.com/svn/trunk/raphaelWebApp/index.html",
+      "web_url": "http://deplaner.googlecode.com/svn/trunk/index.html",
       "container": "tab"
     }
   },
