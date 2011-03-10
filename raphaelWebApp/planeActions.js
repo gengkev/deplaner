@@ -31,7 +31,7 @@ circle1.node.addEventListener("mouseover",function(){
 
 },false);
 var circle2=paper.rect(255,290,70,50);
-var circle3=paper.rect(500,290,70,50);
+var circle3=paper.rect(600,290,70,50);
 
 // Javascript random number generator spazzes well with this
 var time=0;
