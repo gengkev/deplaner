@@ -31,10 +31,10 @@ planeImages.forEach(function(e,i,a) {
 
 //Base
 var circle1=paper.circle(width*52.9/111,height*23.8/61,width*6/174).attr("stroke","none");
-circle1.node.addEventListener("mouseover",function(){
+circle1.addEventListener("mouseover",function(){
 
 },false);
-var circle2;
+var circle2=paper.rect(40,40,70,50);
 var circle3;
 
 // Javascript random number generator spazzes well with this
