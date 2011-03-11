@@ -44,4 +44,4 @@ function planeLaunch() {
   else { console.log("Based on random, plane chose NOT to launch"); }
   setTimeout(planeLaunch,5000+(10000/time));
 };
-planeLaunch();
+//planeLaunch();
