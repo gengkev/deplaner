@@ -98,14 +98,16 @@ function Plane(type,entrance,emergency) {
   this.length=Math.sqrt(Math.pow(entercoords[0]-otherend[0],2)
     +Math.pow(entercoords[1]-otherend[1],2));
   // 50 pixels per second times 1000 (per millisecond)
-  this.plane.animateAlong(this.path,Math.round(this.length*20),true,bouncePlane);
+  this.plane.animateAlong(this.path,Math.round(this.length*20),true,function(){
+    //parse path function :)
+  });
   console.log("Created new plane with id "+this.id+": ");
   return this;
 }
-function bouncePlane() {
+/* function bouncePlane() {
   var _this=planes[this.parentPlaneId];
   _this.remove();
-/*
+  
   var d=_this.path.node.attributes.d.nodeValue;
   var start=d.substring(d.indexOf("L")+1).split(",",2); //array = x and y
   var end=d.substring(d.lastIndexOf("L")+1).split(",",2);
@@ -130,7 +132,18 @@ function bouncePlane() {
   var newBounceside=(bounceside+2)%4;
   _this.plane.animateAlong(_this.path,Math.round(_this.length*20),true,bouncePlane);
   console.log("Bounced plane with id "+_this.id);
-*/
+
+}*/
+function parsePath(path) {
+  if (typeof path!="string") throw new Error("Cannot parse non-string path");
+  path=path.substring(1);
+  path=path.split(" L");
+  var newPath=new Array(path.length);
+  path.forEach(function(e,i,a) {
+    e=e.split(",",2);
+    newPath.push(e);
+  });
+  return newPath;
 }
 Plane.prototype.remove=function() {
   this.plane.animate({opacity:0},1000,function() {
