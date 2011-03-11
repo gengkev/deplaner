@@ -99,7 +99,9 @@ function Plane(type,entrance,emergency) {
     +Math.pow(entercoords[1]-otherend[1],2));
   // 50 pixels per second times 1000 (per millisecond)
   this.plane.animateAlong(this.path,Math.round(this.length*20),true,function(){
-    //parse path function :)
+    var path=parsePath(this.path.node.attributes["d"]);
+    if (path.length!=2) alert("Error!");
+    
   });
   console.log("Created new plane with id "+this.id+": ");
   return this;
@@ -138,9 +140,10 @@ function parsePath(path) {
   if (typeof path!="string") throw new Error("Cannot parse non-string path");
   path=path.substring(1);
   path=path.split(" L");
-  var newPath=new Array(path.length);
+  var newPath=[];
   path.forEach(function(e,i,a) {
     e=e.split(",",2);
+    e[0]=Number(e[0]);e[1]=Number(e[1]);
     newPath.push(e);
   });
   return newPath;
