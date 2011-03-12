@@ -98,11 +98,7 @@ function Plane(type,entrance,emergency) {
   this.length=Math.sqrt(Math.pow(entercoords[0]-otherend[0],2)
     +Math.pow(entercoords[1]-otherend[1],2));
   // 50 pixels per second times 1000 (per millisecond)
-  this.plane.animateAlong(this.path,Math.round(this.length*20),true,function(){
-    var path=parsePath(this.path.node.attributes["d"]);
-    if (path.length!=2) alert("Error!");
-    
-  });
+  this.plane.animateAlong(this.path,Math.round(this.length*20),true,extendPlane);
   console.log("Created new plane with id "+this.id+": ");
   return this;
 }
@@ -147,6 +143,16 @@ function parsePath(path) {
     newPath.push(e);
   });
   return newPath;
+}
+function extendPlane() {
+  var path=parsePath(this.path.node.attributes["d"]);
+  if (path.length!=2) alert("Error!");
+  var newc=[];
+  newc[0]=path[1][0]+(path[1][0]-path[0][0]);
+  newc[1]=path[1][1]+(path[1][1]-path[0][1]);
+  this.length=Math.sqrt(Math.pow(newc[0]-path[1][0],2)
+    +Math.pow(newc[1]-path[1][1],2));
+  this.plane.animateAlong(this.path,Math.round(this.length*20),true,extendPlane);
 }
 Plane.prototype.remove=function() {
   this.plane.animate({opacity:0},1000,function() {
