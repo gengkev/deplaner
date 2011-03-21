@@ -61,7 +61,8 @@ function Plane(type,entrance,emergency) {
     var _this=planes[this.parentPlaneId];
     console.log("Plane with id "+_this.id+" mouse down");
     _this.plane.stop();
-    _this.plane.attr({d:"",x:pos.x,y:pos.y,class:"pathState1"});
+    _this.plane.attr({d:"",x:pos.x,y:pos.y});
+    _this.plane.node.classList.add("pathState1");
     currentPlaneSelected=_this.id;
     window.onmousemove=function(e){ //no work... probably
       if (!e) { e=window.event; } pos=getMouseCoords(e);

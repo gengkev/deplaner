@@ -32,7 +32,13 @@ function Plane(type,entrance,emergency) {
   this.type=type;
   this.entrance=entrance;
   this.emergency=emergency; //either undefined or a SVG path
-  this.id=this.generateId();
+  for (var i=0;i<=planes.length;i++) {
+    if (typeof planes[i]==="undefined") {
+      planes[i]=this;
+      this.id=i;
+    }
+  }
+  if (i<20) alert("Wawawa!!!! You have 20 planes!!!!")
   var entercoords=[0,0],otherend=[0,0];
   switch(Math.floor(this.entrance/4)) {
     case 0: //top - 0 to 3
@@ -61,7 +67,8 @@ function Plane(type,entrance,emergency) {
     var _this=planes[this.parentPlaneId];
     console.log("Plane with id "+_this.id+" mouse down");
     _this.plane.stop();
-    _this.plane.attr({d:"",x:pos.x,y:pos.y,class:"pathState1"});
+    _this.plane.attr({d:"",x:pos.x,y:pos.y});
+    _this.plane.node.className+=" pathState1";
     currentPlaneSelected=_this.id;
     window.onmousemove=function(e){ //no work... probably
       if (!e) { e=window.event; } pos=getMouseCoords(e);
@@ -73,7 +80,7 @@ function Plane(type,entrance,emergency) {
       var d=_this.path.node.attributes.d.nodeValue;
       d=d.substring(d.lastIndexOf("L")+1).split(",",2); //array = x and y
       d[0]=Number(d[0]);d[1]=Number(d[1]); //convert to numbers
-      //Pythagorean
+      //Pythagorean Theorum!!!!!
       var l=Math.sqrt(Math.pow(pos.x-d[0],2)+Math.pow(pos.y-d[1],2));
       if (l>5) { //more than 5 pixels change
         console.log("Plane with id "+_this.id+" captured good mouse move to "+pos.x+","+pos.y+" from "+d[0]+","+d[1]+" with length "+l);
@@ -89,7 +96,7 @@ function Plane(type,entrance,emergency) {
         window.onmousemove=undefined;
         // we are going to put a little dot at the end
         _this.marker=paper.ellipse(pos.x,pos.y,width/600,width/600).attr({fill: "#f00"});
-        _this.path.node.setAttribute("class","pathState2");
+        _this.path.node.className+=" pathState2";
         _this.plane.attr("stroke","none");
         window.currentPlaneSelected=null;
       }
@@ -98,29 +105,21 @@ function Plane(type,entrance,emergency) {
   this.length=Math.sqrt(Math.pow(entercoords[0]-otherend[0],2)
     +Math.pow(entercoords[1]-otherend[1],2));
   // 50 pixels per second times 1000 (per millisecond)
-  this.plane.animateAlong(this.path,Math.round(this.length*20),true,extendPlane);
+  this.plane.animateAlong(this.path,Math.round(this.length*20),true,bouncePlane);
   console.log("Created new plane with id "+this.id+": ");
   return this;
 }
-/* function bouncePlane() {
+function bouncePlane() {
   var _this=planes[this.parentPlaneId];
-  _this.remove();
-  
   var d=_this.path.node.attributes.d.nodeValue;
-  var start=d.substring(d.indexOf("L")+1).split(",",2); //array = x and y
-  var end=d.substring(d.lastIndexOf("L")+1).split(",",2);
-  start[0]=Number(start[0]);start[1]=Number(start[1]);end[0]=Number(end[0]);end[1]=Number(end[1]);
-  var newc=[0,0];
-  // HOW TO FIND BOUNCE SIDE!!!
-  switch (bounceSide%2) {
-    case 0:
-      newc[0]=start[0]+(end[0]-start[0]);
-      newc[1]=start[1];
-      break;
-    case 1:
-      newc[0]=start[0];
-      newc[1]=start[1]+(end[1]-start[1]);
-      break;
+  d=parsePath(d);
+  var newc={x:0,y:0};
+  // wait, where are we bouncing?
+  if (d[1].x==width+planeLength||d[1].x==planeLength/-1) { //right or left
+    newc.x= 
+  }
+  else if (d[1].y==height+planeLength||d[1].y==planeLength/-1) { //bottom or top
+    
   }
   _this.path.remove();
   _this.path=paper.path("M"+end[0]+","+end[1]+"L"+newc[0]+","+newc[1]);
@@ -131,42 +130,34 @@ function Plane(type,entrance,emergency) {
   _this.plane.animateAlong(_this.path,Math.round(_this.length*20),true,bouncePlane);
   console.log("Bounced plane with id "+_this.id);
 
-}*/
+}
 function parsePath(path) {
   if (typeof path!="string") throw new Error("Cannot parse non-string path");
   path=path.substring(1);
   path=path.split(" L");
   var newPath=[];
   path.forEach(function(e,i,a) {
-    e=e.split(",",2);
-    e[0]=Number(e[0]);e[1]=Number(e[1]);
-    newPath.push(e);
+    var coords=e.split(",",2);
+    var xy={x:Number(coords[0]),y:Number(coords[1])};
+    newPath.push(xy);
   });
   return newPath;
 }
+/*
 function extendPlane() {
   var path=parsePath(this.path.node.attributes["d"]);
   if (path.length!=2) alert("Error!");
   var newc=[];
-  newc[0]=path[1][0]+(path[1][0]-path[0][0]);
-  newc[1]=path[1][1]+(path[1][1]-path[0][1]);
-  this.length=Math.sqrt(Math.pow(newc[0]-path[1][0],2)
-    +Math.pow(newc[1]-path[1][1],2));
+  newc[0]=path[1].x+(path[1].x-path[0].x);
+  newc[1]=path[1].y+(path[1].y-path[0].y);
+  this.length=Math.sqrt(Math.pow(newc[0]-path[1].x,2)
+    +Math.pow(newc[1]-path[1].y,2));
   this.plane.animateAlong(this.path,Math.round(this.length*20),true,extendPlane);
-}
+} */
 Plane.prototype.remove=function() {
   this.plane.animate({opacity:0},1000,function() {
     this.remove();
   });
   this.path.remove();
   planes[this.id]=undefined;
-};
-Plane.prototype.generateId=function() {
-  for (i=0;i<=planes.length;i++) {
-    if (typeof planes[i]==="undefined") {
-      planes[i]=this;
-      return i;
-    }
-  }
-  if (i<100) location.refresh()
 };

@@ -1,28 +1,24 @@
 // This is the js file where we do stuff. planeHandler.js does nothing, it just initializes everything.
 
 function resize() {
-  document.getElementById("container").innerHTML="";
-  var containerStyle=window.getComputedStyle(document.getElementById("container"),null);
+  var containerStyle=window.getComputedStyle(canvas.canvas,null);
   if (parseInt(containerStyle.getPropertyValue("width"))<parseInt(containerStyle.getPropertyValue("height"))) {
-    document.getElementById("container").style.height=String(Math.floor(parseInt(containerStyle.getPropertyValue("width"))*6/11))+"px";
-    window.height=parseInt(document.getElementById("container").style.height);
+    canvas.canvas.style.height=String(Math.floor(parseInt(containerStyle.getPropertyValue("width"))*6/11))+"px";
+    window.height=parseInt(canvas.canvas.style.height);
     window.width=parseInt(containerStyle.getPropertyValue("width"));
   }
   else {
-    document.getElementById("container").style.width=String(Math.floor(parseInt(containerStyle.getPropertyValue("height"))*11/6))+"px";
-    window.width=parseInt(document.getElementById("container").style.width);
+    canvas.canvas.style.width=String(Math.floor(parseInt(containerStyle.getPropertyValue("height"))*11/6))+"px";
+    window.width=parseInt(canvas.canvas.style.width);
     window.height=parseInt(containerStyle.getPropertyValue("height"));
   }
-  planeLength=width*1/30;
+  planeLength=width/30;
 
 }
 resize();
 
-window.onresize=function() {
-  (confirm("The window cannot change its size unless you reload.\n\nDo you want to do so now?")==true)?location.reload():null;
-}
+window.onresize=resize;
 
-window.canvas=container.getContext("2d");
 paper.image("field1.png",0,0,width,height);
 
 //Base

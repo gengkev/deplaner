@@ -28,10 +28,9 @@ paper.image("field1.png",0,0,width,height);
 //Base
 var circle1=paper.circle(width*52.9/111,height*23.8/61,width*6/174).attr("stroke","none");
 circle1.node.addEventListener("mouseover",function(){
-
 },false);
-var circle2=paper.rect(290,305,50,25);
-var circle3=paper.rect(535,435,40,20);
+var circle2=paper.rect(width*17/71,height*74/155,width*2/71,height/31).attr("stroke","none");
+var circle3=paper.rect(635,535,width*2/71,height/31).rotate(300);
 
 // Javascript random number generator spazzes well with this
 var time=0;
