@@ -1,3 +1,31 @@
+//First, some missing functionality.
+
+//yay for Mozilla Dev! https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/array/foreach
+if (!Array.prototype.forEach)
+{
+  Array.prototype.forEach = function(fun /*, thisp */)
+  {
+    "use strict";
+
+    if (this === void 0 || this === null)
+      throw new TypeError();
+
+    var t = Object(this);
+    var len = t.length >>> 0;
+    if (typeof fun !== "function")
+      throw new TypeError();
+
+    var thisp = arguments[1];
+    for (var i = 0; i < len; i++)
+    {
+      if (i in t)
+        fun.call(thisp, t[i], i, t);
+    }
+  };
+}
+
+
+
 /*
  pathState: <path d="" class="pathState0" />
  pathState definition: 0 - no path; 1 - dragging path; 2 - path to somewhere
@@ -70,7 +98,7 @@ function Plane(type,entrance,emergency) {
     _this.plane.attr({d:"",x:pos.x,y:pos.y});
     _this.plane.node.className+=" pathState1";
     currentPlaneSelected=_this.id;
-    window.onmousemove=function(e){ //no work... probably
+    window.onmousemove=function(e){
       if (!e) { e=window.event; } pos=getMouseCoords(e);
       // pos.x+=planeLength/2;pos.y+=planeLength/2; //offset to get the cursor on the plane center
       /* We should add points to the end of the path, and hope it will 
@@ -113,16 +141,21 @@ function bouncePlane() {
   var _this=planes[this.parentPlaneId];
   var d=_this.path.node.attributes.d.nodeValue;
   d=parsePath(d);
+  //should make it last two elements only
+  d.splice(0,d.length-2);
+
   var newc={x:0,y:0};
   // wait, where are we bouncing?
   if (d[1].x==width+planeLength||d[1].x==planeLength/-1) { //right or left
-    newc.x= 
+    newc.x=d[1].x;
+    newc.y=d[1].y*2-d[0].y;
   }
   else if (d[1].y==height+planeLength||d[1].y==planeLength/-1) { //bottom or top
-    
+    newc.x=d[1].x*2-d[0].x;
+    newc.y=d[1].y;
   }
   _this.path.remove();
-  _this.path=paper.path("M"+end[0]+","+end[1]+"L"+newc[0]+","+newc[1]);
+  _this.path=paper.path("M"+d[1].x+","+d[1].y+"L"+newc.x+","+newc.y);
   _this.length=Math.sqrt(Math.pow(end[0]-newc[0],2)
     +Math.pow(end[1]-newc[1],2));
   // 50 pixels per second times 1000 (per millisecond)
