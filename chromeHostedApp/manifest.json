@@ -2,15 +2,15 @@
   "name": "__MSG_name__",
   "version": "0.1",
   "description": "__MSG_description__",
-  // "icons": { ... },
   "default_locale": "en",
+  "icons": {
+    
+  },
   "app": {
     "launch": {
-      "web_url": "http://deplaner.googlecode.com/svn/trunk/index.html",
+      "web_url": "http://deplaner.googlecode.com/svn/trunk/index.html?dev=true",
       "container": "tab"
     }
   },
-  // "homepage_url": "http://path/to/homepage",
-  // "options_page": "aFile.html",
-  "update_url": "http://deplaner.googlecode.com/svn/trunk/platforms/chromeUpdate.xml"
+  "minimum_version": "8"
 }

@@ -56,17 +56,11 @@ function getMouseCoords(e) {
 }
 var currentPlaneSelected=null;
 var planes=new Array();
-function Plane(type,entrance,emergency) {
+function Plane(id,type,entrance,emergency) {
+  this.id=id; //where are we in planes[]?
   this.type=type;
   this.entrance=entrance;
   this.emergency=emergency; //either undefined or a SVG path
-  for (var i=0;i<=planes.length;i++) {
-    if (typeof planes[i]==="undefined") {
-      planes[i]=this;
-      this.id=i;
-    }
-  }
-  if (i<20) alert("Wawawa!!!! You have 20 planes!!!!")
   var entercoords=[0,0],otherend=[0,0];
   switch(Math.floor(this.entrance/4)) {
     case 0: //top - 0 to 3
@@ -96,7 +90,7 @@ function Plane(type,entrance,emergency) {
     console.log("Plane with id "+_this.id+" mouse down");
     _this.plane.stop();
     _this.plane.attr({d:"",x:pos.x,y:pos.y});
-    _this.plane.node.className+=" pathState1";
+    _this.plane.node.className.add("pathState1");
     currentPlaneSelected=_this.id;
     window.onmousemove=function(e){
       if (!e) { e=window.event; } pos=getMouseCoords(e);
@@ -124,7 +118,7 @@ function Plane(type,entrance,emergency) {
         window.onmousemove=undefined;
         // we are going to put a little dot at the end
         _this.marker=paper.ellipse(pos.x,pos.y,width/600,width/600).attr({fill: "#f00"});
-        _this.path.node.className+=" pathState2";
+        _this.path.node.className.add("pathState2");
         _this.plane.attr("stroke","none");
         window.currentPlaneSelected=null;
       }

@@ -47,13 +47,13 @@ if (location&&typeof location.search!="undefined") {
   }
   else {
     var h1=document.createElement("h1");
-    h1.appendChild(document.createTextNode("Sorry, this is not ready for public use!")); 
+    h1.appendChild(document.createTextNode("Sorry, this is not ready for public use!"));
+    var refreshLink=document.createElement("span");
+    refreshLink.innerHTML="If you are sure you want to continue, click here".link("?dev=true");
     document.body.removeChild(document.getElementById("container"));
     document.body.appendChild(h1);
+    document.body.appendChild(refreshLink);
   }
-}
-else {
-  alert("Sorry, your browser does not support some of the functionality used in this application.");
 }
 
 function startTime() {
@@ -61,8 +61,16 @@ function startTime() {
   var time=0;
   var timer=setInterval(function(){time++;},1000);
   function planeLaunch() {
-    if(randomNum()*time/10 > 1) {
-      new Plane(0,randomNum(15));
+    if (time==0) { setTimeout(planeLaunch,1000); return; }
+    else if(randomNum()*time/10 > 1) {
+      var i;
+      var _planesArrayLength=planes.length;
+      for (i=0;i<=planesArrayLength;i++) {
+        if (typeof planes[i]==="undefined") {
+          break;
+        }
+      }
+      planes[i]=new Plane(i,0,randomNum(15));
       console.log("Based on random, plane chose to launch");
     }
     else { console.log("Based on random, plane chose NOT to launch"); }
