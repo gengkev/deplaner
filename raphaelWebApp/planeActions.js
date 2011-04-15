@@ -3,14 +3,15 @@
 
 function resize() {
   document.getElementById("container").innerHTML="";
-  var containerStyle=window.getComputedStyle(document.getElementById("container"),null);
-  if (parseInt(containerStyle.getPropertyValue("width"))<parseInt(containerStyle.getPropertyValue("height"))) {
-    document.getElementById("container").style.height=String(Math.floor(parseInt(containerStyle.getPropertyValue("width"))*6/11))+"px";
+  var width=window.innerWidth;
+  var height=window.innerHeight;
+  if (width<height) {
+    document.getElementById("container").style.height=Math.floor(width*6/11)+"px";
     window.height=parseInt(document.getElementById("container").style.height);
     window.width=parseInt(containerStyle.getPropertyValue("width"));
   }
   else {
-    document.getElementById("container").style.width=String(Math.floor(parseInt(containerStyle.getPropertyValue("height"))*11/6))+"px";
+    document.getElementById("container").style.width=Math.floor(parseInt(height*11/6)+"px";
     window.width=parseInt(document.getElementById("container").style.width);
     window.height=parseInt(containerStyle.getPropertyValue("height"));
   }
