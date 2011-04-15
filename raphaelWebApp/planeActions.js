@@ -42,7 +42,7 @@ function initField() {
   var circle3=paper.rect(635,535,msrs.main.w*2/71,msrs.main.h/31).rotate(300);
 }
 
-if (location&&location.search!) {
+if (location&&location.search) {
   var queryString=location.search.substring(1).split("&"); //remove ?, split by &
   var queryObject={};
   queryString.forEach(function(e,i,a) {
