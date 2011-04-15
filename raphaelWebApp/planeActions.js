@@ -1,22 +1,28 @@
 // This is the js file where we do stuff. planeHandler.js does nothing, it just initializes everything.
 
-
+var msrs={};
+function Measure(width,height) {
+  this.w=parseInt(width);
+  this.h=parseInt(height);
+  this.width=this.w;
+  this.height=this.h;
+}
 function resize() {
-  document.getElementById("container").innerHTML="";
+  var container=document.getElementById("container");
+  container.innerHTML="";
   var width=window.innerWidth;
   var height=window.innerHeight;
-  if (width<height) {
-    document.getElementById("container").style.height=Math.floor(width*6/11)+"px";
-    window.height=parseInt(document.getElementById("container").style.height);
-    window.width=parseInt(containerStyle.getPropertyValue("width"));
-  }
-  else {
-    document.getElementById("container").style.width=Math.floor(parseInt(height*11/6)+"px";
-    window.width=parseInt(document.getElementById("container").style.width);
-    window.height=parseInt(containerStyle.getPropertyValue("height"));
-  }
-  planeLength=width*1/30;
+  //affix to ratio
+  var ratio=6/11;
+  if (width<height)
+    container.style.height=Math.floor(width*ratio)+"px";
+  else
+    container.style.width=Math.floor(parseInt(height/ratio)+"px";
 
+  var style=window.getComputedStyle(container,null);
+  msrs.main=new Measure(style.getPropertyValue("height"),style.getPropertyValue("width"));
+
+  msrs.plane=new Measure(msrs.main.w*1/30,msrs.main.w*1/30);
 }
 resize();
 
@@ -25,18 +31,18 @@ window.onresize=function() {
 }
 
 function initField() {
-  var paper=Raphael("container",width,height);
-  paper.image("field1.png",0,0,width,height);
+  var paper=Raphael("container",msrs.main.w,msrs.main.h);
+  paper.image("field1.png",0,0,msrs.main.w,msrs.main.h);
 
   //Base
-  var circle1=paper.circle(width*52.9/111,height*23.8/61,width*6/174).attr("stroke","none");
+  var circle1=paper.circle(msrs.main.w*52.9/111,msrs.main.h*23.8/61,msrs.main.w*6/174).attr("stroke","none");
   circle1.node.addEventListener("mouseover",function(){
   },false);
-  var circle2=paper.rect(width*17/71,height*74/155,width*2/71,height/31).attr("stroke","none");
-  var circle3=paper.rect(635,535,width*2/71,height/31).rotate(300);
+  var circle2=paper.rect(msrs.main.w*17/71,msrs.main.h*74/155,msrs.main.w*2/71,msrs.main.h/31).attr("stroke","none");
+  var circle3=paper.rect(635,535,msrs.main.w*2/71,msrs.main.h/31).rotate(300);
 }
 
-if (location&&typeof location.search!="undefined") {
+if (location&&location.search!) {
   var queryString=location.search.substring(1).split("&"); //remove ?, split by &
   var queryObject={};
   queryString.forEach(function(e,i,a) {
@@ -55,6 +61,9 @@ if (location&&typeof location.search!="undefined") {
     document.body.appendChild(h1);
     document.body.appendChild(refreshLink);
   }
+}
+else {
+  alert("The browser you're using must be really, really old.");
 }
 
 function startTime() {
