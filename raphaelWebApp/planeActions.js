@@ -17,7 +17,7 @@ function resize() {
   if (width<height)
     container.style.height=Math.floor(width*ratio)+"px";
   else
-    container.style.width=Math.floor(parseInt(height/ratio)+"px";
+    container.style.width=Math.floor(height/ratio)+"px";
 
   var style=window.getComputedStyle(container,null);
   msrs.main=new Measure(style.getPropertyValue("height"),style.getPropertyValue("width"));
