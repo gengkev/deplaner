@@ -13,7 +13,7 @@ function resize() {
   var width=window.innerWidth;
   var height=window.innerHeight;
   //affix to ratio
-  var ratio=6/11;
+  var ratio=11/6;
   if (width<height)
     container.style.height=Math.floor(width*ratio)+"px";
   else
